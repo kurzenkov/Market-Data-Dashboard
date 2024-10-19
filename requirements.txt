@@ -1,5 +1,0 @@
-requests
-dash
-dash-bootstrap-components
-plotly
-pandas

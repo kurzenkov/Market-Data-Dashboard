@@ -98,20 +98,28 @@ def save_to_db(data, exchange, market_type):
 
 # Получение данных с Binance для спотового рынка
 def get_binance_spot_data():
+    # url для спотового рынка
     url = "https://api.binance.com/api/v3/ticker/24hr"
     logging.info("Запрос данных с Binance (спотовый рынок)...")
     response = requests.get(url)
+    # проверка на ошибки
     response.raise_for_status()
+    # получение данных
     data = response.json()
 
     logging.info(f"Получено {len(data)} инструментов с Binance (спотовый рынок).")  # Логируем количество инструментов
 
-    # Корректное извлечение данных с учетом всех ключей
+    # корректное извлечение данных с учетом всех ключей
     for item in data:
+        # highPrice24h - максимальная цена за 24 часа
         item['highPrice24h'] = float(item.get('highPrice', 0) or 0)
+        # lowPrice24h - минимальная цена за 24 часа
         item['lowPrice24h'] = float(item.get('lowPrice', 0) or 0)
+        # volume24h - обьем торгов за 24 часа
         item['volume24h'] = float(item.get('volume', 0) or 0)
+        # lastPrice - последняя цена
         item['lastPrice'] = float(item.get('lastPrice', 0) or 0)
+        # count - количество сделок за 24 часа
         item['count'] = int(float(item.get('count', 0)) or 0)
 
     logging.info(f"Данные с Binance (спотовый рынок) успешно получены: {data[:5]}...")
