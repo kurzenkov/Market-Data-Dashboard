@@ -6,7 +6,8 @@ authors = ["sa01237 <sa01237@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.14"
+
 requests = "^2.32.3"
 dash = "^2.18.1"
 dash-bootstrap-components = "^1.6.0"
@@ -14,6 +15,7 @@ plotly = "^5.24.1"
 pandas = "^2.2.3"
 pyodbc = "^5.1.0"
 clickhouse-connect = "^0.8.3"
+pyinstaller = "^6.11.0"
 
 
 [build-system]

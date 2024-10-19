@@ -5,9 +5,9 @@ import os
 
 from Alex.env import *
 
+
 # Функция для соединения с ClickHouse
 def get_clickhouse_client():
-
     client = clickhouse_connect.get_client(host=CLICKHOUSE_HOST,
                                            port=CLICKHOUSE_PORT,
                                            username=CLICKHOUSE_USERNAME,
@@ -40,7 +40,16 @@ def get_row_count_last_hour(client, database, table):
 
 # Функция для создания HTML-страницы с кастомной пагинацией, сортировкой и фильтрацией
 def create_html_page(data):
+    # Создаем DataFrame с добавленным индексом
     df = pd.DataFrame(data, columns=["Database", "Table", "Rows in Last Hour"])
+
+    # Сортируем по количеству строк за последний час
+    df = df.sort_values(by="Rows in Last Hour", ascending=False)
+
+    # Добавляем индекс в качестве нового столбца
+    df.insert(0, 'Index', range(1, len(df) + 1))
+
+    # Преобразуем DataFrame в HTML
     html_content = df.to_html(index=False)
 
     # Добавляем DataTables библиотеку и скрипт для активации сортировки, фильтрации и кастомной пагинации
@@ -63,9 +72,9 @@ def create_html_page(data):
                     "pageLength": -1,  // По умолчанию отображаются все записи
                     "searching": true,
                     "ordering": true,
-                    "order": [[2, "desc"]],  // Сортировка по столбцу "Rows in Last Hour" (индекс 2) по убыванию
+                    "order": [[3, "desc"]],  // Сортировка по столбцу "Rows in Last Hour" (индекс 3) по убыванию
                     "info": true
-                }});
+                }}); 
             }});
         </script>
     </body>
